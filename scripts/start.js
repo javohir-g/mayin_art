@@ -2,6 +2,7 @@
 const { spawn } = require('child_process');
 
 const port = process.env.PORT || process.env.port || 5000;
+const buildDir = process.env.BUILD_DIR || 'build';
 const candidates = [
   'serve/build/main.js', // current versions
   'serve/bin/serve' // older versions
@@ -23,7 +24,7 @@ if (!serveBin) {
 }
 
 const useListenFlag = process.platform !== 'win32';
-const args = ['-s', 'dist'];
+const args = ['-s', buildDir];
 if (useListenFlag) {
   args.push('-l', `tcp:${port}`);
 } else {

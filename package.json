@@ -57,8 +57,8 @@
                                                       "dev": "vite",
                                                       "build": "vite build",
                                                       "start": "node ./scripts/start.js",
-                                                      "start:render": "npx serve -s dist -l tcp:$PORT",
-                                                      "start:local": "npx serve -s dist -l 5000"
+                                                      "start:render": "npx serve -s build -l tcp:$PORT",
+                                                      "start:local": "npx serve -s build -l 5000"
                   }
         ,"engines": { "node": ">=18" }
 }
