@@ -26,7 +26,8 @@ if (!serveBin) {
 const useListenFlag = process.platform !== 'win32';
 const args = ['-s', buildDir];
 if (useListenFlag) {
-  args.push('-l', `tcp:${port}`);
+  // Bind explicitly to all interfaces on non-Windows (Render requires a network binding)
+  args.push('-l', `tcp://0.0.0.0:${port}`);
 } else {
   // On Windows, use -p <port> to avoid DNS lookup issues
   args.push('-p', String(port));
