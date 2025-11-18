@@ -1,5 +1,5 @@
 import { Search, ShoppingCart, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 
@@ -14,12 +14,12 @@ export default function Header({ isVisible = true }: HeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 transition-transform duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-100 transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       <nav className="container mx-auto px-4 md:px-8 py-6 flex items-center justify-between">
-  {/* Navigation Links */}
+  {/* Navigation Links (hidden on small screens via Tailwind) */}
   <div className="hidden md:flex items-center gap-8 md:gap-12">
           <Link
             to="/"
@@ -57,10 +57,9 @@ export default function Header({ isVisible = true }: HeaderProps) {
           >
             Admin
           </Link>
-        </div>
+    </div>
 
-        {/* Mobile hamburger (moved into icons area on small screens) */}
-
+    {/* Mobile hamburger (hidden on md+) */}
   {/* Logo */}
   <div className="absolute left-1/2 -translate-x-1/2 z-0">
           <Link to="/">
@@ -77,8 +76,9 @@ export default function Header({ isVisible = true }: HeaderProps) {
           {/* Hamburger visible only on small screens */}
           <button
             aria-label="Open menu"
+            aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(true)}
-            className="block md:hidden p-2 hover:bg-gray-100 rounded-md z-50"
+            className="md:hidden block p-2 hover:bg-gray-100 rounded-md z-50"
           >
             <Menu className="w-6 h-6" />
           </button>
@@ -100,11 +100,12 @@ export default function Header({ isVisible = true }: HeaderProps) {
         </div>
       </nav>
 
-      {/* Mobile menu panel */}
+      {/* Mobile menu panel: fixed and placed above the header so clicks work reliably */}
       <div
-        className={`md:hidden absolute left-0 right-0 top-full bg-white border-t shadow-lg z-40 transition-transform duration-200 ${
-          mobileOpen ? "block" : "hidden"
+        className={`md:hidden fixed left-0 right-0 top-[72px] bg-white border-t shadow-lg z-50 transform transition-transform duration-200 ${
+          mobileOpen ? "translate-y-0" : "-translate-y-full"
         }`}
+        style={{ willChange: "transform" }}
       >
         <div className="px-4 py-4 flex items-center justify-between">
           <div>
@@ -116,6 +117,7 @@ export default function Header({ isVisible = true }: HeaderProps) {
             aria-label="Close menu"
             onClick={() => setMobileOpen(false)}
             className="p-2 hover:bg-gray-100 rounded-md"
+            aria-expanded={mobileOpen}
           >
             <X className="w-6 h-6" />
           </button>
