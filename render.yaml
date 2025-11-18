@@ -1,0 +1,7 @@
+services:
+  - type: static
+    name: mayin-art
+    repo: https://github.com/javohir-g/mayin_art
+    branch: main
+    buildCommand: npm ci && npm run build
+    publishPath: dist
