@@ -1,4 +1,5 @@
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart, Menu, X } from "lucide-react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 
@@ -9,6 +10,7 @@ interface HeaderProps {
 export default function Header({ isVisible = true }: HeaderProps) {
   const location = useLocation();
   const { itemCount, openCart } = useCart();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <header
@@ -17,8 +19,8 @@ export default function Header({ isVisible = true }: HeaderProps) {
       }`}
     >
       <nav className="container mx-auto px-4 md:px-8 py-6 flex items-center justify-between">
-        {/* Navigation Links */}
-        <div className="flex items-center gap-8 md:gap-12">
+  {/* Navigation Links */}
+  <div className="hidden md:flex items-center gap-8 md:gap-12">
           <Link
             to="/"
             className={`font-['Outfit'] font-normal text-[20px] transition-colors ${
@@ -57,8 +59,10 @@ export default function Header({ isVisible = true }: HeaderProps) {
           </Link>
         </div>
 
-        {/* Logo */}
-        <div className="absolute left-1/2 -translate-x-1/2">
+        {/* Mobile hamburger (moved into icons area on small screens) */}
+
+  {/* Logo */}
+  <div className="absolute left-1/2 -translate-x-1/2 z-0">
           <Link to="/">
             <img
               src="/src/assets/logos/MAYIN.png"
@@ -68,8 +72,17 @@ export default function Header({ isVisible = true }: HeaderProps) {
           </Link>
         </div>
 
-        {/* Icons */}
-        <div className="flex items-center gap-4">
+  {/* Icons */}
+  <div className="flex items-center gap-4 z-50">
+          {/* Hamburger visible only on small screens */}
+          <button
+            aria-label="Open menu"
+            onClick={() => setMobileOpen(true)}
+            className="block md:hidden p-2 hover:bg-gray-100 rounded-md z-50"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+
           <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
             <Search className="w-6 h-6" />
           </button>
@@ -86,6 +99,65 @@ export default function Header({ isVisible = true }: HeaderProps) {
           </button>
         </div>
       </nav>
+
+      {/* Mobile menu panel */}
+      <div
+        className={`md:hidden absolute left-0 right-0 top-full bg-white border-t shadow-lg z-40 transition-transform duration-200 ${
+          mobileOpen ? "block" : "hidden"
+        }`}
+      >
+        <div className="px-4 py-4 flex items-center justify-between">
+          <div>
+            <Link to="/">
+              <img src="/src/assets/logos/MAYIN.png" alt="MAYIN" className="h-8 w-auto" />
+            </Link>
+          </div>
+          <button
+            aria-label="Close menu"
+            onClick={() => setMobileOpen(false)}
+            className="p-2 hover:bg-gray-100 rounded-md"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        <div className="px-4 pb-6 flex flex-col gap-4">
+          <Link
+            to="/"
+            onClick={() => setMobileOpen(false)}
+            className={`font-['Outfit'] text-lg ${
+              location.pathname === "/" ? "text-black" : "text-gray-700"
+            }`}
+          >
+            Home
+          </Link>
+          <Link
+            to="/catalog"
+            onClick={() => setMobileOpen(false)}
+            className={`font-['Outfit'] text-lg ${
+              location.pathname === "/catalog" ? "text-black" : "text-gray-700"
+            }`}
+          >
+            Catalog
+          </Link>
+          <a
+            href="#"
+            onClick={() => setMobileOpen(false)}
+            className="font-['Outfit'] text-lg text-gray-700"
+          >
+            Contact
+          </a>
+          <Link
+            to="/admin"
+            onClick={() => setMobileOpen(false)}
+            className={`font-['Outfit'] text-lg ${
+              location.pathname === "/admin" ? "text-black" : "text-gray-700"
+            }`}
+          >
+            Admin
+          </Link>
+        </div>
+      </div>
     </header>
   );
 }
